@@ -1,6 +1,6 @@
-# PhysioTracker - AI-Powered Physiotherapy Exercise Monitoring
+# POSECRAFT - AI-Powered Exercise Monitoring System
 
-A full-stack web application that uses AI to monitor physiotherapy exercises in real-time, providing automated rep counting, form feedback, and progress tracking.
+A full-stack web application that uses AI to monitor exercises in real-time, providing automated rep counting, form feedback, and progress tracking.
 
 ## 🎯 Features
 

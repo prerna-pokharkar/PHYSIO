@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PhysioTracker Backend Runner
+POSECRAFT Backend Runner
 Simple script to start the Flask backend server
 """
 
@@ -10,7 +10,7 @@ from app import app, load_models
 
 def main():
     print("=" * 60)
-    print("PhysioTracker - AI Exercise Monitoring Backend")
+    print("POSECRAFT - AI Exercise Monitoring Backend")
     print("=" * 60)
     
     # Check if model files exist

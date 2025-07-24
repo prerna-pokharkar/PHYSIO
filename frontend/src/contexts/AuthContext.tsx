@@ -43,6 +43,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
+      // Clear all session storage related to the app
+      sessionStorage.clear();
+      localStorage.removeItem('disclaimerAccepted');
+      
       await signOut(auth);
     } catch (error) {
       console.error('Error signing out:', error);
@@ -58,6 +62,49 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     return unsubscribe;
   }, []);
+
+  // Auto-logout on app close/refresh
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (currentUser) {
+        // Clear session data
+        sessionStorage.clear();
+        localStorage.removeItem('disclaimerAccepted');
+        
+        // Force logout - this ensures clean state on next app open
+        try {
+          await signOut(auth);
+        } catch (error) {
+          console.error('Auto-logout error:', error);
+        }
+      }
+    };
+
+    const handlePageHide = async () => {
+      if (currentUser) {
+        // Clear session data when page is hidden (mobile app switching, etc.)
+        sessionStorage.clear();
+        localStorage.removeItem('disclaimerAccepted');
+      }
+    };
+
+    // Add event listeners for various close scenarios
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('pagehide', handlePageHide);
+    
+    // For mobile and modern browsers
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && currentUser) {
+        sessionStorage.clear();
+        localStorage.removeItem('disclaimerAccepted');
+      }
+    });
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, [currentUser]);
 
   const value = {
     currentUser,

@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# POSECRAFT Frontend
+
+This is the frontend application for POSECRAFT - an AI-powered exercise monitoring system.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

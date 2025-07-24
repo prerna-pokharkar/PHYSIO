@@ -19,7 +19,10 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  Button,
+  IconButton,
+  Tooltip
 } from '@mui/material';
 import {
   BarChart,
@@ -27,7 +30,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   ResponsiveContainer,
   LineChart,
   Line,
@@ -39,6 +42,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import TimerIcon from '@mui/icons-material/Timer';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { apiService, UserSessionsResponse, UserSession } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -52,6 +56,13 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (currentUser) {
       fetchUserSessions();
+      
+      // Set up periodic refresh every 30 seconds to catch new sessions
+      const refreshInterval = setInterval(() => {
+        fetchUserSessions();
+      }, 30000);
+      
+      return () => clearInterval(refreshInterval);
     }
   }, [currentUser]);
 
@@ -61,8 +72,14 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       setError('');
+      console.log('📊 Fetching user sessions for:', currentUser.uid);
       const data = await apiService.getUserSessions(currentUser.uid);
+      console.log('📊 Dashboard data received:', data);
       setSessionData(data);
+      
+      if (data.sessions.length === 0) {
+        console.log('📊 No sessions found for user');
+      }
     } catch (error) {
       setError('Failed to load dashboard data. Please make sure the backend is running.');
       console.error('Error fetching user sessions:', error);
@@ -170,18 +187,29 @@ const Dashboard: React.FC = () => {
         <Typography variant="h4" component="h1">
           Your Progress Dashboard
         </Typography>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Period</InputLabel>
-          <Select
-            value={selectedPeriod}
-            label="Period"
-            onChange={(e) => setSelectedPeriod(e.target.value as 'week' | 'month' | 'all')}
-          >
-            <MenuItem value="week">Last Week</MenuItem>
-            <MenuItem value="month">Last Month</MenuItem>
-            <MenuItem value="all">All Time</MenuItem>
-          </Select>
-        </FormControl>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Tooltip title="Refresh Dashboard">
+            <IconButton 
+              onClick={fetchUserSessions} 
+              disabled={loading}
+              color="primary"
+            >
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Period</InputLabel>
+            <Select
+              value={selectedPeriod}
+              label="Period"
+              onChange={(e) => setSelectedPeriod(e.target.value as 'week' | 'month' | 'all')}
+            >
+              <MenuItem value="week">Last Week</MenuItem>
+              <MenuItem value="month">Last Month</MenuItem>
+              <MenuItem value="all">All Time</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Box>
 
       {error && (
@@ -262,7 +290,7 @@ const Dashboard: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Bar dataKey="reps" fill="#1976d2" />
                 </BarChart>
               </ResponsiveContainer>
@@ -292,7 +320,7 @@ const Dashboard: React.FC = () => {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <RechartsTooltip />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -313,7 +341,7 @@ const Dashboard: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Line 
                     type="monotone" 
                     dataKey="reps" 

@@ -44,13 +44,13 @@ const Login: React.FC = () => {
           <Box sx={{ mb: 3 }}>
             <FitnessCenterIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
             <Typography component="h1" variant="h4" gutterBottom>
-              PhysioTracker
+              POSECRAFT
             </Typography>
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              AI-Powered Physiotherapy Exercise Monitoring
+              AI-Powered Exercise Monitoring System
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-              Track your physiotherapy exercises with real-time AI feedback and progress monitoring
+              Perfect your exercise form with real-time AI feedback and progress tracking
             </Typography>
           </Box>
 

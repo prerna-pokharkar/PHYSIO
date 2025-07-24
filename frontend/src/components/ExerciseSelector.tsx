@@ -296,7 +296,7 @@ const ExerciseSelector: React.FC<ExerciseSelectorProps> = ({ onExerciseSelect })
           Choose Your Exercise
         </Typography>
         <Typography variant="h6" color="text.secondary" gutterBottom>
-          Select an exercise to start your AI-powered physiotherapy session
+          Select an exercise to start your AI-powered monitoring session
         </Typography>
         <Typography variant="body1" color="text.secondary">
           {exercises.length} exercises available from your trained model
@@ -339,7 +339,7 @@ const ExerciseSelector: React.FC<ExerciseSelectorProps> = ({ onExerciseSelect })
         {filteredExercises.map((exercise) => {
           const info = exerciseInfo[exercise] || {
             name: formatExerciseName(exercise),
-            description: 'Physiotherapy exercise for strength and mobility',
+            description: 'Exercise for strength and mobility improvement',
             benefits: ['Strength', 'Mobility', 'Health'],
             difficulty: 'Beginner',
             category: 'General',
